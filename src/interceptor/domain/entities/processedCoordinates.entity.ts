@@ -1,4 +1,4 @@
-export class ResponseEntity {
+export class ProcessedCoordinatesEntity {
   constructor(
     public readonly centroid: { lat: number; lng: number },
     public readonly bounds: {

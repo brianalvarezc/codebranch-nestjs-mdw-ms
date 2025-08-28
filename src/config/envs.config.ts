@@ -6,8 +6,8 @@ interface EnvVars {
   CONTROLLER_PATH: string;
   AUTH_USER: string;
   AUTH_PASSWORD: string;
-  FAST_API_URL: string;
-  FAST_API_PATH: string;
+  MICROSERVICE_URL: string;
+  MICROSERVICE_PATH: string;
 }
 
 const envsSchema = joi
@@ -16,8 +16,8 @@ const envsSchema = joi
     CONTROLLER_PATH: joi.string().required(),
     AUTH_USER: joi.string().required(),
     AUTH_PASSWORD: joi.string().required(),
-    FAST_API_URL: joi.string().uri().required(),
-    FAST_API_PATH: joi.string().required(),
+    MICROSERVICE_URL: joi.string().uri().required(),
+    MICROSERVICE_PATH: joi.string().required(),
   })
   .unknown(true);
 
@@ -32,6 +32,6 @@ export const env = {
   controllerPath: envVars.CONTROLLER_PATH,
   authUser: envVars.AUTH_USER,
   authPassword: envVars.AUTH_PASSWORD,
-  fastApiUrl: envVars.FAST_API_URL,
-  fastApiPath: envVars.FAST_API_PATH,
+  microServiceUrl: envVars.MICROSERVICE_URL,
+  microServicePath: envVars.MICROSERVICE_PATH,
 };

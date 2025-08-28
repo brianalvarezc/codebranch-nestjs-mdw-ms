@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 export class InterceptorController {
     constructor(private readonly interceptorService: InterceptorService) {}
 
-    @Get("/hello")
+    @Get()
     getHello(): Observable<string> {
         return this.interceptorService.getHello();
     }

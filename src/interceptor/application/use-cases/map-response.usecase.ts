@@ -1,8 +1,8 @@
-import { ResponseEntity } from '../../domain/entities/response.entity';
+import { ProcessedCoordinatesEntity } from '../../domain/entities/processedCoordinates.entity';
 
 export class MapResponseUseCase {
-  execute(apiResponse: any): ResponseEntity {
+  execute(apiResponse: any): ProcessedCoordinatesEntity {
     // Suponiendo que apiResponse tiene las propiedades necesarias
-    return new ResponseEntity(apiResponse.centroid, apiResponse.bounds);
+    return new ProcessedCoordinatesEntity(apiResponse.centroid, apiResponse.bounds);
   }
 }

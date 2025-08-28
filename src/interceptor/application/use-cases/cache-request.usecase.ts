@@ -1,16 +1,16 @@
 import { CoordinatesEntity } from '../../domain/entities/coordinates.entity';
-import { ResponseEntity } from '../../domain/entities/response.entity';
+import { ProcessedCoordinatesEntity } from '../../domain/entities/processedCoordinates.entity';
 import { Observable, of } from 'rxjs';
 
-const cache = new Map<string, ResponseEntity>();
+const cache = new Map<string, ProcessedCoordinatesEntity>();
 
 export class CacheRequestUseCase {
-  get(entity: CoordinatesEntity): Observable<ResponseEntity | null> {
+  get(entity: CoordinatesEntity): Observable<ProcessedCoordinatesEntity | null> {
     const key = JSON.stringify(entity.points);
     return of(cache.get(key) ?? null);
   }
 
-  set(entity: CoordinatesEntity, response: ResponseEntity): void {
+  set(entity: CoordinatesEntity, response: ProcessedCoordinatesEntity): void {
     const key = JSON.stringify(entity.points);
     cache.set(key, response);
   }
