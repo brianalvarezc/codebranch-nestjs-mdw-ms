@@ -1,0 +1,38 @@
+
+# Node / NestJS
+node_modules
+dist
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Runtime envs and secrets
+.env
+.env.*
+.npmrc
+
+# Git
+.git
+.gitignore
+
+# Docker
+Dockerfile*
+docker-compose*.yml
+
+# Editor / OS files
+.vscode
+.idea
+.DS_Store
+Thumbs.db
+
+# Test / coverage
+coverage
+test-results
+
+# Misc
+*.tgz
+tmp
+temp
+
