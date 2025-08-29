@@ -15,7 +15,8 @@
     "outDir": "./dist",
     "baseUrl": "./",
     "paths": {
-      "@interceptor/*": ["src/interceptor/*"]
+      "@interceptor/*": ["src/interceptor/*"],
+      "@src/*": ["src/*"]
     },
     "incremental": true,
     "skipLibCheck": true,

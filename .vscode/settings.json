@@ -1,0 +1,6 @@
+{
+  "jest.pathToJest": "./node_modules/.bin/jest",
+  "jestrunner.jestCommandLine": "pnpm test --",
+  "jest.runMode": "on-demand",
+  "typescript.tsdk": "./node_modules/typescript/lib"
+}

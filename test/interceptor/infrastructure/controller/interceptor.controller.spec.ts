@@ -1,17 +1,16 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { InterceptorController } from './interceptor.controller';
-import { InterceptorService } from '../../service/interceptor.service';
+import { of } from 'rxjs';
+import { InterceptorController } from '@src/interceptor/infrastructure/controller/interceptor.controller';
+import { InterceptorService } from '@src/interceptor/service/interceptor.service';
 
 describe('InterceptorController', () => {
   let controller: InterceptorController;
 
-  beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      controllers: [InterceptorController],
-      providers: [InterceptorService],
-    }).compile();
+  beforeEach(() => {
+    const mockService: Partial<InterceptorService> = {
+      create: jest.fn().mockReturnValue(of({})),
+    };
 
-    controller = module.get<InterceptorController>(InterceptorController);
+    controller = new InterceptorController(mockService as InterceptorService);
   });
 
   it('should be defined', () => {

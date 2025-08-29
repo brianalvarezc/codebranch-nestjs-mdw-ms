@@ -1,15 +1,15 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { InterceptorService } from 'interceptor/service/interceptor.service';
+import { of } from 'rxjs';
+import { InterceptorService } from '@src/interceptor/service/interceptor.service';
 
 describe('InterceptorService', () => {
   let service: InterceptorService;
 
-  beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      providers: [InterceptorService],
-    }).compile();
+  beforeEach(() => {
+    const mockValidate = { execute: jest.fn().mockReturnValue(of(true)) } as any;
+    const mockCache = { get: jest.fn().mockReturnValue(of(null)), set: jest.fn() } as any;
+    const mockMicro = { send: jest.fn().mockReturnValue(of({})) } as any;
 
-    service = module.get<InterceptorService>(InterceptorService);
+    service = new InterceptorService(mockValidate, mockCache, mockMicro);
   });
 
   it('should be defined', () => {

@@ -93,7 +93,7 @@ Este proyecto implementa un microservicio en **NestJS** siguiendo principios de 
 
 ## 🐳 Uso con Docker o Podman
 
-1. Construye la imagen Docker:
+1. Construye la imagen:
    ```sh
    docker build -t codebranch-nestjs-mdw-ms:latest .
    podman build -t codebranch-nestjs-mdw-ms:latest .
