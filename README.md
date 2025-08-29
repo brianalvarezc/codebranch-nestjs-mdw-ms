@@ -1,44 +1,45 @@
-# Proyecto: codebranch-nestjs-mdw-ms
 
-Este proyecto implementa un microservicio en **NestJS** siguiendo principios de Clean Architecture, con soporte para validación, caching, integración con microservicios externos y flujos reactivos usando RxJS.
+# Project: codebranch-nestjs-mdw-ms
 
-## 📌 Características
-- Arquitectura modular y desacoplada (application, domain, infrastructure)
-- Validación robusta de DTOs con `class-validator` y `class-transformer`
-- Caching en memoria para optimizar llamadas repetidas
-- Integración con microservicios vía HTTP usando `@nestjs/axios`
-- Flujos reactivos con RxJS (`Observable`, operadores)
-- Documentación automática con Swagger
-- Testing unitario con Jest
+This project implements a microservice in **NestJS** following Clean Architecture principles, with support for validation, caching, integration with external microservices, and reactive flows using RxJS.
 
-## 📂 Estructura del Proyecto
+## 📌 Features
+- Modular and decoupled architecture (application, domain, infrastructure)
+- Robust DTO validation with `class-validator` and `class-transformer`
+- In-memory caching to optimize repeated calls
+- Integration with microservices via HTTP using `@nestjs/axios`
+- Reactive flows with RxJS (`Observable`, operators)
+- Automatic documentation with Swagger
+- Unit testing with Jest
+
+## 📂 Project Structure
 ```
 .
 ├── src/
-│   ├── app.module.ts                # Módulo principal NestJS
-│   ├── main.ts                      # Bootstrap de la app
-│   ├── config/                      # Configuración (env, openApi)
+│   ├── app.module.ts                # Main NestJS module
+│   ├── main.ts                      # App bootstrap
+│   ├── config/                      # Configuration (env, openApi)
 │   │   ├── envs.config.ts
 │   │   ├── openApi.config.ts
 │   │   └── index.ts
 │   └── interceptor/
-│       ├── interceptor.module.ts    # Módulo interceptor
+│       ├── interceptor.module.ts    # Interceptor module
 │       ├── application/
-│       │   └── use-cases/           # Casos de uso
+│       │   └── use-cases/           # Use cases
 │       │       ├── cache-request.usecase.ts
 │       │       ├── map-response.usecase.ts
 │       │       └── validate-coordinates.usecase.ts
 │       ├── domain/
-│       │   └── entities/            # Entidades de dominio
+│       │   └── entities/            # Domain entities
 │       │       ├── coordinates.entity.ts
 │       │       ├── point.entity.ts
 │       │       └── processedCoordinates.entity.ts
 │       ├── infrastructure/
-│       │   └── controller/          # Controlador HTTP
+│       │   └── controller/          # HTTP controller
 │       │       ├── interceptor.controller.ts
 │       │       └── interceptor.controller.spec.ts
 │       └── service/
-│           ├── cache.service.ts     # Servicio de caché
+│           ├── cache.service.ts     # Cache service
 │           ├── interceptor.service.ts
 │           ├── interceptor.service.spec.ts
 │           ├── microserviceClient.service.ts
@@ -51,95 +52,163 @@ Este proyecto implementa un microservicio en **NestJS** siguiendo principios de 
 │           └── mapper/
 │               └── points.mapper.ts
 ├── test/
-│   ├── app.e2e-spec.ts              # Pruebas end-to-end
-│   └── jest-e2e.json                # Configuración Jest e2e
-├── Dockerfile                       # Imagen Docker multi-stage
-├── .dockerignore                    # Exclusiones para Docker
-├── package.json                     # Dependencias y scripts
-├── README.md                        # Documentación
+│   ├── app.e2e-spec.ts              # End-to-end tests
+│   └── jest-e2e.json                # Jest e2e configuration
+├── Dockerfile                       # Multi-stage Docker image
+├── .dockerignore                    # Docker exclusions
+├── package.json                     # Dependencies and scripts
+├── README.md                        # Documentation
 └── ...
 ```
 
-## 🚀 Instalación Local
+## 🚀 Local Installation
 
 
-### ⚙️ Configuración de variables de entorno
+### ⚙️ Environment Variable Configuration
 
-Antes de iniciar el proyecto, copia el archivo `.env.example.txt` como `.env` en la raíz del repositorio y personaliza los valores según tu entorno:
+Before starting the project, copy the `.env.example.txt` file as `.env` in the root of the repository and customize the values according to your environment:
 
 ```sh
 cp .env.example.txt .env
 ```
 
-Asegúrate de ajustar los valores de las variables (puerto, rutas, credenciales, URLs de microservicio, etc.) según tu configuración local o de despliegue.
+Make sure to adjust the variable values (port, paths, credentials, microservice URLs, etc.) according to your local or deployment configuration.
 
-1. Clona el repositorio:
+1. Clone the repository:
    ```sh
-   git clone <URL_DEL_REPOSITORIO>
+   git clone <REPOSITORY_URL>
    cd codebranch-nestjs-mdw-ms
    ```
 
-2. Instala las dependencias:
+2. Install dependencies:
    ```sh
    npm ci
-   # o si usas pnpm:
+   # or if you use pnpm:
    # pnpm install --frozen-lockfile
    ```
 
-3. (Solo para producción) Compila el proyecto:
+3. (Production only) Build the project:
    ```sh
    npm run build
    ```
-   > No es necesario ejecutar `npm run build` para desarrollo, ya que `npm run start:dev` transpila y ejecuta el código en tiempo real.
+   > You do not need to run `npm run build` for development, as `npm run start:dev` transpiles and runs the code in real time.
 
-4. Inicia el microservicio:
-   - Para desarrollo (hot-reload):
+4. Start the microservice:
+   - For development (hot-reload):
      ```sh
      npm run start:dev
      ```
-   - Para producción (requiere build previo):
+   - For production (requires prior build):
      ```sh
      npm run start:prod
      ```
 
-## 🐳 Uso con Docker o Podman
+## 🐳 Usage with Docker or Podman
 
-1. Construye la imagen (puedes especificar el puerto por defecto con ARG):
+1. Build the image (you can specify the default port with ARG):
    ```sh
    docker build -t codebranch-nestjs-mdw-ms:latest --build-arg PORT=3000 .
    podman build -t codebranch-nestjs-mdw-ms:latest --build-arg PORT=3000 .
    ```
-   > Si no se especifica `--build-arg PORT=xxxx`, se usará el valor por defecto definido en el Dockerfile (`ARG PORT=3000`).
+   > If `--build-arg PORT=xxxx` is not specified, the default value defined in the Dockerfile (`ARG PORT=3000`) will be used.
 
-2. Ejecuta el contenedor (puedes cambiar el puerto con la variable de entorno):
+2. Run the container (you can change the port with the environment variable):
    ```sh
    docker run --rm -p 8080:8080 -e PORT=8080 codebranch-nestjs-mdw-ms:latest
    podman run --rm -p 8080:8080 -e PORT=8080 codebranch-nestjs-mdw-ms:latest
    ```
-   > Si no se especifica `-e PORT=xxxx`, se usará el valor por defecto definido en el Dockerfile o el `.env` dentro de la imagen.
-   > El puerto expuesto por defecto es 3000, pero puedes mapear cualquier puerto externo con `-p` y cambiar el interno con `-e PORT=xxxx`.
+   > If `-e PORT=xxxx` is not specified, the default value defined in the Dockerfile or the `.env` inside the image will be used.
+   > The default exposed port is 3000, but you can map any external port with `-p` and change the internal one with `-e PORT=xxxx`.
 
 
 ## 🧪 Testing
 
-Las pruebas unitarias se ejecutan con Jest.
+Unit tests are run with Jest.
 
-1. Ejecuta los tests:
+1. Run the tests:
    ```sh
    npm test
    ```
 
-2. Para ver cobertura:
+2. To view coverage:
    ```sh
    npm run test:cov
    ```
 
-## 📝 Notas
-- El caché normaliza los puntos de coordenadas para evitar duplicados por orden.
-- La documentación Swagger está disponible en `/docs` si se habilita en el módulo principal.
-- Usa variables de entorno para configuración sensible (`.env`).
-- El Dockerfile está optimizado para imágenes pequeñas y seguras (multi-stage, usuario no-root).
-- `.dockerignore` excluye archivos innecesarios para el build.
+## 📝 Notes
+- The cache normalizes coordinate points to avoid duplicates by order.
+- Swagger documentation is available at `/docs` if enabled in the main module.
+- Use environment variables for sensitive configuration (`.env`).
+- The Dockerfile is optimized for small and secure images (multi-stage, non-root user).
+- `.dockerignore` excludes unnecessary files for the build.
 
-## 📋 Licencia
-Este proyecto está bajo la licencia **LICENCIA**.
+## 📋 License
+This project is licensed under **LICENSE**.
+
+## 📚 API Endpoints
+
+### Process Coordinates
+- **Endpoint:** `POST /interceptor`
+- **Description:** Receives a list of points and returns the centroid and geographic bounds. Integrates with an external geoprocessor microservice.
+
+#### Request Body
+```json
+{
+   "points": [
+      { "lat": 40.712776, "lng": -74.005974 },
+      { "lat": -33.868820, "lng": 151.209296 },
+      { "lat": 35.689487, "lng": 139.691711 },
+      { "lat": 55.755825, "lng": 37.617298 },
+      { "lat": -23.550520, "lng": -46.633308 }
+   ]
+}
+```
+
+#### Successful Response
+```json
+{
+   "centroid": {
+      "lat": 14.9477496,
+      "lng": 41.5758046
+   },
+   "bounds": {
+      "north": 55.755825,
+      "south": -33.86882,
+      "east": 151.209296,
+      "west": -74.005974
+   }
+}
+```
+
+#### Error Responses
+- **400 Bad Request:** Invalid body or malformed points.
+   ```json
+   {
+      "statusCode": 400,
+      "message": "Invalid coordinates",
+      "error": "The provided coordinates are not valid"
+   }
+   ```
+- **500 Internal Server Error:** External microservice error or unexpected failure.
+   ```json
+   {
+      "statusCode": 500,
+      "message": "Error al procesar la solicitud",
+      "error": "<detail from external service or error message>"
+   }
+   ```
+
+#### Example Usage
+```bash
+curl -X POST "http://localhost:3000/interceptor" \
+   -H "Content-Type: application/json" \
+   -d '{
+      "points": [
+         { "lat": 40.712776, "lng": -74.005974 },
+         { "lat": -33.868820, "lng": 151.209296 },
+         { "lat": 35.689487, "lng": 139.691711 },
+         { "lat": 55.755825, "lng": 37.617298 },
+         { "lat": -23.550520, "lng": -46.633308 }
+      ]
+   }'
+```
