@@ -5,7 +5,7 @@ import { Observable, of } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
 import { ProcessedCoordinatesDto } from './dto/processedCoordinates.dto';
 
-import { env } from 'config';
+import { env } from '@src/config';
 import { CoordinatesDto } from './dto/coordinates.dto';
 import { PointDto } from './dto/points.dto';
 import { BoundsDto } from './dto/bounds.dto';
@@ -37,7 +37,7 @@ export class MicroServiceClient {
     bounds.south = 0;
     response.centroid = centroid;
     response.bounds = bounds;
-    const delayTime = 1000 * (Math.floor(Math.random() * 10) + 1);
+    const delayTime = 1000 * (Math.floor(Math.random() * 5) + 1);
     return of(response).pipe(delay(delayTime));
   }
 }

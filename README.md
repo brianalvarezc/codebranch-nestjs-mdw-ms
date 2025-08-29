@@ -93,18 +93,20 @@ Este proyecto implementa un microservicio en **NestJS** siguiendo principios de 
 
 ## 🐳 Uso con Docker o Podman
 
-1. Construye la imagen:
+1. Construye la imagen (puedes especificar el puerto por defecto con ARG):
    ```sh
-   docker build -t codebranch-nestjs-mdw-ms:latest .
-   podman build -t codebranch-nestjs-mdw-ms:latest .
+   docker build -t codebranch-nestjs-mdw-ms:latest --build-arg PORT=3000 .
+   podman build -t codebranch-nestjs-mdw-ms:latest --build-arg PORT=3000 .
    ```
+   > Si no se especifica `--build-arg PORT=xxxx`, se usará el valor por defecto definido en el Dockerfile (`ARG PORT=3000`).
 
-2. Ejecuta el contenedor:
+2. Ejecuta el contenedor (puedes cambiar el puerto con la variable de entorno):
    ```sh
-   docker run --rm -p 3000:3000 codebranch-nestjs-mdw-ms:latest
-   podman run --rm -p 3000:3000 codebranch-nestjs-mdw-ms:latest
+   docker run --rm -p 8080:8080 -e PORT=8080 codebranch-nestjs-mdw-ms:latest
+   podman run --rm -p 8080:8080 -e PORT=8080 codebranch-nestjs-mdw-ms:latest
    ```
-   > El puerto por defecto es 3000, puedes cambiarlo con la variable de entorno `PORT`.
+   > Si no se especifica `-e PORT=xxxx`, se usará el valor por defecto definido en el Dockerfile o el `.env` dentro de la imagen.
+   > El puerto expuesto por defecto es 3000, pero puedes mapear cualquier puerto externo con `-p` y cambiar el interno con `-e PORT=xxxx`.
 
 ## 🧪 Testing
 
