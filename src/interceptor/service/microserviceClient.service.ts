@@ -1,28 +1,46 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, HttpException } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { AxiosResponse } from 'axios';
-import { Observable, of } from 'rxjs';
-import { delay, map } from 'rxjs/operators';
+import { Observable, of, throwError } from 'rxjs';
+import { catchError, delay, map } from 'rxjs/operators';
 import { ProcessedCoordinatesDto } from './dto/processedCoordinates.dto';
 
 import { env } from '@src/config';
 import { CoordinatesDto } from './dto/coordinates.dto';
 import { PointDto } from './dto/points.dto';
 import { BoundsDto } from './dto/bounds.dto';
+import { instanceToPlain } from 'class-transformer';
 
 @Injectable()
 export class MicroServiceClient {
   constructor(private readonly httpService: HttpService) { }
 
   send(coordinatesDto: CoordinatesDto): Observable<ProcessedCoordinatesDto> {
-    // return this.httpService
-    //   .post(`${env.microServiceUrl}/${env.microServicePath}`, coordinatesDto)
-    //   .pipe(
-    //     map((response: AxiosResponse) => response.data as ProcessedCoordinatesDto)
-    //   );
+      const base = `${env.microServiceUrl}`.replace('localhost', '127.0.0.1');
+      const url = `${base}/${env.microServicePath}`.replace(/\/\/+/, '/').replace('http:/', 'http://');
 
-    // Simulando un llamado a una api de 5 segundos
-    return this.mockResponse();
+      const payload = instanceToPlain(coordinatesDto);
+
+      return this.httpService
+        .post<ProcessedCoordinatesDto>(url, payload, {
+            headers: {
+              'Content-Type': 'application/json',
+            }
+          }
+      )
+      .pipe(
+        map((response: AxiosResponse) => response.data as ProcessedCoordinatesDto),
+        catchError((error) => {
+          const status = error?.response?.status || 500;
+          const detail = error?.response?.data || error?.message || 'Unknown error';
+          console.error('Error calling microservice:', detail);
+          return throwError(() => new HttpException({
+            statusCode: status,
+            message: 'Error processing request',
+            error: detail,
+          }, status));
+        })
+      );
   }
 
   mockResponse(): Observable<ProcessedCoordinatesDto> {

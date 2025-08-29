@@ -1,12 +1,11 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
-import { catchError, map, Observable, of, switchMap } from 'rxjs';
+import { BadRequestException, HttpException, Injectable } from '@nestjs/common';
+import { map, Observable, of, switchMap } from 'rxjs';
 import { CoordinatesDto } from './dto/coordinates.dto';
 import { PointsMapper } from './mapper/points.mapper';
 import { ValidateCoordinatesUseCase } from '../application/use-cases/validate-coordinates.usecase';
 import { MicroServiceClient } from './microserviceClient.service';
 import { CacheService } from './cache.service';
 import { ProcessedCoordinatesDto } from './dto/processedCoordinates.dto';
-import { ErrorResponseDto } from './dto/errorResponse.dto';
 import { CoordinatesEntity } from '../domain/entities/coordinates.entity';
 
 @Injectable()
@@ -17,16 +16,13 @@ export class InterceptorService {
 		private readonly microServiceClient: MicroServiceClient,
 	) { }
 
-	create(coordinatesDto: CoordinatesDto): Observable<ProcessedCoordinatesDto | ErrorResponseDto> {
+	create(coordinatesDto: CoordinatesDto): Observable<ProcessedCoordinatesDto> {
 		const entity = this.dtoToEntity(coordinatesDto);
 
 		return this.validateEntity(entity).pipe(
 			switchMap((isValid) => {
-				if (!isValid) return of(this.buildBadRequest());
+				if (!isValid) throw this.buildBadRequest();
 				return this.findOrFetch(entity, coordinatesDto);
-			}),
-			catchError((err): Observable<ProcessedCoordinatesDto | ErrorResponseDto> => {
-				return of(this.buildInternalError(err));
 			}),
 		);
 	}
@@ -60,11 +56,19 @@ export class InterceptorService {
 		);
 	}
 
-	private buildBadRequest(): ErrorResponseDto {
-		return new ErrorResponseDto(400, 'Invalid coordinates', 'The provided coordinates are not valid');
+	private buildBadRequest(): HttpException {
+		return new HttpException({
+			statusCode: 400,
+			message: 'Invalid coordinates',
+			error: 'The provided coordinates are not valid',
+		}, 400);
 	}
 
-	private buildInternalError(err: unknown): ErrorResponseDto {
-		return new ErrorResponseDto(500, 'Internal server error', (err as any)?.message ?? String(err));
+	private buildInternalError(err: unknown): HttpException {
+		return new HttpException({
+			statusCode: 500,
+			message: 'Internal server error',
+			error: (err as any)?.message ?? String(err),
+		}, 500);
 	}
 }

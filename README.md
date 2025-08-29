@@ -62,6 +62,17 @@ Este proyecto implementa un microservicio en **NestJS** siguiendo principios de 
 
 ## 🚀 Instalación Local
 
+
+### ⚙️ Configuración de variables de entorno
+
+Antes de iniciar el proyecto, copia el archivo `.env.example.txt` como `.env` en la raíz del repositorio y personaliza los valores según tu entorno:
+
+```sh
+cp .env.example.txt .env
+```
+
+Asegúrate de ajustar los valores de las variables (puerto, rutas, credenciales, URLs de microservicio, etc.) según tu configuración local o de despliegue.
+
 1. Clona el repositorio:
    ```sh
    git clone <URL_DEL_REPOSITORIO>
@@ -107,6 +118,7 @@ Este proyecto implementa un microservicio en **NestJS** siguiendo principios de 
    ```
    > Si no se especifica `-e PORT=xxxx`, se usará el valor por defecto definido en el Dockerfile o el `.env` dentro de la imagen.
    > El puerto expuesto por defecto es 3000, pero puedes mapear cualquier puerto externo con `-p` y cambiar el interno con `-e PORT=xxxx`.
+
 
 ## 🧪 Testing
 
